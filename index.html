@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบช่วยกรอก ทอสต.6</title>
+    <title>ระบบช่วยจัดทำเอกสาร ทอสต.6</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -80,32 +80,17 @@
 
     <div class="max-w-5xl mx-auto">
         <header class="mb-8 border-b border-gray-700 pb-4">
-            <h1 class="text-3xl font-bold text-white">ระบบช่วยกรอก ทอสต.6</h1>
-            <p class="text-gray-400">ลงชื่อตั้งเบิกอัตโนมัติ พร้อมระบบเลือกวันปฏิบัติงาน</p>
+            <h1 class="text-3xl font-bold text-white">ระบบช่วยกรอกข้อมูล ทอสต.6</h1>
+            <p class="text-gray-400">สร้างชุดข้อมูลวันปฏิบัติงานและรายชื่อทนาย สำหรับนำไปวางในแบบฟอร์ม</p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="md:col-span-3 bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-                <label class="block text-sm font-medium text-gray-400 mb-3">ขั้นตอนที่ 1: เลือกไฟล์ Excel
-                    ต้นฉบับ</label>
-                <input type="file" id="fileInput" accept=".xlsx, .xls"
-                    class="block w-full text-sm text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer bg-gray-900 border border-gray-600 rounded-lg">
-            </div>
-            <div class="flex items-end">
-                <button id="exportBtn"
-                    class="hidden w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-lg transition-all transform hover:scale-105">
-                    บันทึก & ส่งออกไฟล์ 💾
-                </button>
-            </div>
-        </div>
-
-        <div id="calendarSection" class="hidden bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg mb-8">
+        <div id="calendarSection" class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg mb-8">
             <h2 class="text-xl font-semibold mb-6 flex items-center gap-2">
-                <span>ขั้นตอนที่ 2: เลือกวันปฏิบัติงาน</span>
-                <span class="text-sm font-normal text-gray-400">(เลือกเดือนและคลิกวันที่ต้องการ)</span>
+                <span>ขั้นตอนที่ 1: เลือกวันปฏิบัติงาน</span>
+                <span class="text-sm font-normal text-gray-400">(เลือกเดือนและวันที่ต้องการ)</span>
             </h2>
 
-            <div class="flex flex-wrap gap-4 mb-6">
+            <div class="flex flex-wrap gap-4 mb-6 items-end">
                 <div class="w-48">
                     <label class="block text-xs text-gray-500 mb-1">เดือน</label>
                     <select id="monthSelect"
@@ -129,6 +114,11 @@
                     <input type="number" id="yearSelect" value="2568"
                         class="w-full bg-gray-900 border border-gray-600 text-white rounded-lg p-2.5 focus:ring-blue-500 outline-none">
                 </div>
+
+                <button id="selectAllBtn"
+                    class="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors border border-gray-500">
+                    เลือกวันทั้งหมด (ทั้งเดือน)
+                </button>
             </div>
 
             <div class="calendar-grid mb-2 text-xs font-bold text-gray-500 uppercase tracking-widest text-center">
@@ -145,22 +135,28 @@
             <div class="flex justify-between items-center bg-gray-900 p-4 rounded-lg">
                 <span id="selectedCount" class="text-blue-400 font-medium">ยังไม่ได้เลือกวัน</span>
                 <button id="applyCalendarBtn"
-                    class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors">
-                    ยืนยันวันที่เลือก
+                    class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors shadow-lg">
+                    สร้างตารางลงชื่อ ⬇️
                 </button>
             </div>
         </div>
 
-        <div id="tableWrapper" class="hidden bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-            <div class="flex justify-between items-center mb-4">
+        <div id="tableWrapper" class="hidden bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                 <div>
-                    <h2 class="text-xl font-semibold text-white">ขั้นตอนที่ 3: ระบุรายชื่อทนาย</h2>
+                    <h2 class="text-xl font-semibold text-white">ขั้นตอนที่ 2: ระบุรายชื่อทนาย</h2>
                     <p class="text-sm text-gray-400">พิมพ์ชื่อเพื่อค้นหาจากฐานข้อมูล</p>
                 </div>
-                <button id="clearAllBtn"
-                    class="px-4 py-2 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-600/30 rounded-lg text-sm transition-all">
-                    ล้างรายชื่อทั้งหมด 🗑️
-                </button>
+                <div class="flex gap-2">
+                    <button id="clearAllBtn"
+                        class="px-4 py-2 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-600/30 rounded-lg text-sm transition-all">
+                        ล้างรายชื่อทั้งหมด 🗑️
+                    </button>
+                    <button id="exportBtn"
+                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-lg transition-all">
+                        Export เป็นไฟล์ Excel 💾
+                    </button>
+                </div>
             </div>
 
             <div id="tableContainer" class="overflow-x-auto rounded-lg border border-gray-700"></div>
@@ -170,49 +166,30 @@
     <datalist id="lawyerSuggestions"></datalist>
 
     <script>
-        const fileInput = document.getElementById('fileInput');
-        const exportBtn = document.getElementById('exportBtn');
         const tableContainer = document.getElementById('tableContainer');
         const tableWrapper = document.getElementById('tableWrapper');
-        const calendarSection = document.getElementById('calendarSection');
         const monthSelect = document.getElementById('monthSelect');
         const yearSelect = document.getElementById('yearSelect');
         const calendarDays = document.getElementById('calendarDays');
         const applyCalendarBtn = document.getElementById('applyCalendarBtn');
         const selectedCountText = document.getElementById('selectedCount');
         const clearAllBtn = document.getElementById('clearAllBtn');
+        const selectAllBtn = document.getElementById('selectAllBtn');
+        const exportBtn = document.getElementById('exportBtn');
 
         const thaiMonths = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 
-        let currentWorkbook = null;
         let selectedDates = new Set();
-        const currentTargetSheet = "ทอสต.6";
-        const startRowIndex = 10; // แถวที่ 11 ใน Excel
 
-        // 1. โหลดไฟล์
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const data = new Uint8Array(event.target.result);
-                currentWorkbook = XLSX.read(data, { type: 'array' });
-                if (!currentWorkbook.Sheets[currentTargetSheet]) {
-                    alert(`ไม่พบ Sheet ชื่อ "${currentTargetSheet}" กรุณาตรวจสอบไฟล์อีกครั้ง`);
-                    return;
-                }
-                calendarSection.classList.remove('hidden');
-                renderCalendar();
-            };
-            reader.readAsArrayBuffer(file);
-        });
+        // โหลดปฏิทินตั้งแต่เริ่มเปิดหน้าเว็บ
+        renderCalendar();
 
-        // 2. จัดการปฏิทิน
         function renderCalendar() {
             calendarDays.innerHTML = '';
             const month = parseInt(monthSelect.value);
             const yearBE = parseInt(yearSelect.value);
             const yearCE = yearBE - 543;
+
             const daysInMonth = new Date(yearCE, month + 1, 0).getDate();
             const firstDay = new Date(yearCE, month, 1).getDay();
 
@@ -236,92 +213,96 @@
             }
         }
 
-        monthSelect.onchange = () => { selectedDates.clear(); renderCalendar(); };
-        yearSelect.onchange = () => { selectedDates.clear(); renderCalendar(); };
+        monthSelect.onchange = () => { selectedDates.clear(); renderCalendar(); selectedCountText.textContent = `ยังไม่ได้เลือกวัน`; };
+        yearSelect.onchange = () => { selectedDates.clear(); renderCalendar(); selectedCountText.textContent = `ยังไม่ได้เลือกวัน`; };
 
-        // 3. กดยืนยันวันที่เลือก (Apply)
+        // ปุ่มเลือกวันทั้งหมด
+        selectAllBtn.onclick = () => {
+            const month = parseInt(monthSelect.value);
+            const yearBE = parseInt(yearSelect.value);
+            const yearCE = yearBE - 543;
+            const daysInMonth = new Date(yearCE, month + 1, 0).getDate();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                selectedDates.add(day);
+            }
+            renderCalendar();
+            selectedCountText.textContent = `เลือกแล้ว ${selectedDates.size} วัน`;
+        };
+
+        // สร้างตารางลงชื่อ
         applyCalendarBtn.onclick = () => {
             if (selectedDates.size === 0) return alert('กรุณาเลือกวันที่ปฏิบัติงานอย่างน้อย 1 วัน');
 
-            const ws = currentWorkbook.Sheets[currentTargetSheet];
-            let aoa = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
-
             const sortedDays = Array.from(selectedDates).sort((a, b) => a - b);
-            const monthName = thaiMonths[parseInt(monthSelect.value)];
-            const yearBE = yearSelect.value;
+            updateTablePreview(sortedDays);
 
-            // ล้างข้อมูลเก่าในช่วงแถว 11-41 ก่อน (เผื่อกรณีเลือกวันลดลง)
-            // หมายเหตุ: ในไฟล์งานจริงอาจต้องระวังเรื่อง Footer ด้านล่าง
-
-            for (let i = 0; i < sortedDays.length; i++) {
-                const rowIndex = startRowIndex + i;
-                if (!aoa[rowIndex]) aoa[rowIndex] = ["", "", "", "", ""];
-                aoa[rowIndex][0] = i + 1; // ลำดับ
-                aoa[rowIndex][1] = "";    // ชื่อ (ให้ว่างไว้)
-                aoa[rowIndex][2] = `${sortedDays[i]} ${monthName} ${yearBE}`; // วันที่
-            }
-
-            // ตัดแถวที่เกิน 31 วันออกถ้ามี
-            const totalRowsToKeep = startRowIndex + sortedDays.length;
-            // หมายเหตุ: การ splice แถวอาจทำให้สูญเสีย Footer ได้ หากต้องการให้ Footer เลื่อนขึ้น 
-            // ให้ใช้โค้ดที่จัดการ Array โดยละเอียดตามจำนวนวันที่เลือกจริง
-            const unusedCount = 31 - sortedDays.length;
-            if (unusedCount > 0) aoa.splice(totalRowsToKeep, unusedCount);
-
-            currentWorkbook.Sheets[currentTargetSheet] = XLSX.utils.aoa_to_sheet(aoa);
-            updateTablePreview(sortedDays.length);
-            exportBtn.classList.remove('hidden');
             tableWrapper.classList.remove('hidden');
             window.scrollTo({ top: tableWrapper.offsetTop, behavior: 'smooth' });
         };
 
-        // 4. แสดงตาราง Preview
-        function updateTablePreview(count) {
+        function updateTablePreview(sortedDays) {
             // โหลด Autocomplete จากฐานข้อมูล
             const datalist = document.getElementById('lawyerSuggestions');
             if (typeof getLawyerList === 'function') {
                 datalist.innerHTML = getLawyerList().map(l => `<option value="${l.fullName}">`).join('');
             }
 
-            const ws = currentWorkbook.Sheets[currentTargetSheet];
-            const aoa = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+            const monthName = thaiMonths[parseInt(monthSelect.value)];
+            const yearBE = yearSelect.value;
 
-            let html = `<table><thead><tr><th>ลำดับ</th><th>รายชื่อทนายความอาสา</th><th>วันปฏิบัติงาน</th></tr></thead><tbody>`;
-            for (let i = 0; i < count; i++) {
-                const rowIndex = startRowIndex + i;
-                html += `<tr class="bg-gray-800">
-                    <td class="text-center text-gray-500">${i + 1}</td>
-                    <td class="p-0">
-                        <input type="text" list="lawyerSuggestions" data-row="${rowIndex}" 
+            let html = `<table class="w-full text-sm text-left border-collapse">`;
+            html += `<thead class="text-xs text-gray-300 uppercase bg-gray-700"><tr>`;
+            html += `<th class="border border-gray-600 px-4 py-2 w-16 text-center">ลำดับ</th>`;
+            html += `<th class="border border-gray-600 px-4 py-2">รายชื่อทนายความอาสา</th>`;
+            html += `<th class="border border-gray-600 px-4 py-2 w-48">วันปฏิบัติงาน</th>`;
+            html += `</tr></thead><tbody>`;
+
+            for (let i = 0; i < sortedDays.length; i++) {
+                const day = sortedDays[i];
+                const dateStr = `${day} ${monthName} ${yearBE}`;
+                html += `<tr class="bg-gray-800 hover:bg-gray-750">
+                    <td class="border border-gray-600 px-4 py-2 text-center text-gray-500">${i + 1}</td>
+                    <td class="border border-gray-600 p-0">
+                        <input type="text" list="lawyerSuggestions" 
                             class="lawyer-input w-full bg-transparent px-4 py-2 text-blue-400 outline-none focus:bg-gray-700" 
-                            placeholder="ค้นหาชื่อ..." value="${aoa[rowIndex][1] || ''}">
+                            placeholder="ค้นหาชื่อ..." value="">
                     </td>
-                    <td class="text-gray-400">${aoa[rowIndex][2]}</td>
+                    <td class="border border-gray-600 px-4 py-2 text-gray-400 date-cell">${dateStr}</td>
                 </tr>`;
             }
             html += `</tbody></table>`;
             tableContainer.innerHTML = html;
         }
 
-        // 5. ปุ่มล้างชื่อ
+        // ปุ่มล้างชื่อ
         clearAllBtn.onclick = () => {
             if (confirm('ล้างรายชื่อทนายความทั้งหมดในตาราง?')) {
                 document.querySelectorAll('.lawyer-input').forEach(input => input.value = '');
             }
         };
 
-        // 6. ส่งออกไฟล์
+        // ส่งออกไฟล์ข้อมูลดิบ
         exportBtn.onclick = () => {
-            const ws = currentWorkbook.Sheets[currentTargetSheet];
-            let aoa = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+            // สร้าง Array 2 มิติ สำหรับแปลงเป็น Excel
+            let aoa = [["ลำดับ", "รายชื่อทนายความอาสา", "วันปฏิบัติงาน"]];
 
-            document.querySelectorAll('.lawyer-input').forEach(input => {
-                const r = parseInt(input.getAttribute('data-row'));
-                aoa[r][1] = input.value.trim();
+            const rows = document.querySelectorAll('#tableContainer tbody tr');
+            rows.forEach((row, index) => {
+                const lawyerName = row.querySelector('.lawyer-input').value.trim();
+                const dateStr = row.querySelector('.date-cell').innerText.trim();
+                aoa.push([index + 1, lawyerName, dateStr]);
             });
 
-            currentWorkbook.Sheets[currentTargetSheet] = XLSX.utils.aoa_to_sheet(aoa);
-            XLSX.writeFile(currentWorkbook, `ทอสต6_เดือน_${thaiMonths[monthSelect.value]}_${yearSelect.value}.xlsx`);
+            // สร้าง Workbook และ Worksheet ใหม่
+            const newWorkbook = XLSX.utils.book_new();
+            const newWorksheet = XLSX.utils.aoa_to_sheet(aoa);
+
+            // นำ Sheet ใส่ลงใน Workbook
+            XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, "รายชื่อทนาย");
+
+            // ดาวน์โหลดไฟล์
+            XLSX.writeFile(newWorkbook, `ข้อมูลทนาย_${thaiMonths[monthSelect.value]}_${yearSelect.value}.xlsx`);
         };
     </script>
 </body>
